@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 ######################################################################
 #START##START##START##START##START##START##START##START##START##START#
 ######################################################################
@@ -20,12 +21,12 @@ menu_o = pg.image.load("sprites/osmall.bmp")
 menu_x = pg.image.load("sprites/xsmall.bmp")
 ###
 class Tile():
-    def __init__(self, pos_x, pos_y,):
+    def __init__(self, pos_x, pos_y, value):
         self.pos_x = pos_x
         self.pos_y = pos_y
+        self.value = value
         self.isDefault = True
         self.isX = False
-        self.isO = False
         self.hoverOver = False
         self.dim = 100
 
@@ -40,11 +41,23 @@ class Tile():
                  wnd.blit(tile_clear, (self.pos_x, self.pos_y))
 
         else:
-            wnd.blit(tile_x, (self.pos_x, self.pos_y))
+            if self.isX:
+                wnd.blit(tile_x, (self.pos_x, self.pos_y))
+            else:
+                wnd.blit(tile_o, (self.pos_x, self.pos_y))
+            self.value = 999
 
-game_area = [Tile(20, 70), Tile(150, 70), Tile(280, 70),
-             Tile(20, 200), Tile(150, 200), Tile(280, 200),
-             Tile(20, 330), Tile(150, 330), Tile(280, 330)]
+game_area = [Tile(20, 70, 1), Tile(150, 70, 2), Tile(280, 70, 3),
+             Tile(20, 200, 4), Tile(150, 200, 5), Tile(280, 200, 6),
+             Tile(20, 330, 7), Tile(150, 330, 8), Tile(280, 330, 9)]
+
+#Define who starts the game
+if random.randint(0,1) == 0:
+    xTurn = True
+
+else:
+    xTurn = False
+###########################
 
 ########################################################################
 #Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop#
@@ -70,19 +83,52 @@ while run:
             isClicked = pg.mouse.get_pressed()
         if event.type == pg.MOUSEBUTTONUP:
             isClicked = pg.mouse.get_pressed()
-##############################################
-        #Change color/texture of a tile if hover over and on-click.
+        ############################################################
+        #Change color/texture of a tile if hover over and on-click.#
+        ############################################################
         for tile in game_area:
+
             if tile.isDefault:
                 if ((mousePos[0] > tile.pos_x) and (mousePos[0] < tile.pos_x + tile.dim) and
                     (mousePos[1] > tile.pos_y) and (mousePos[1] < tile.pos_y +tile.dim)):
 
                     if isClicked[0] == 1:
+                        if xTurn:
+                            tile.isX = True
+                            xTurn = False
+                        else:
+                            tile.isX = False
+                            xTurn = True
+
                         tile.isDefault = False
                     else:
                         tile.hoverOver = True
                 else:
                     tile.hoverOver = False
+
+
+        #######
+        #0#1#2#
+        #3#4#5#
+        #6#7#8#
+        #######
+
+            #Horizontal
+        if ((game_area[0].value == game_area[1].value) and (game_area[1].value == game_area[2].value)  or
+            ((game_area[3].value == game_area[4].value) and (game_area[4].value == game_area[5].value)) or
+            ((game_area[6].value == game_area[7].value) and (game_area[7].value == game_area[8].value)) or
+            #Vertical
+            ((game_area[0].value == game_area[3].value) and (game_area[3].value == game_area[6].value)) or
+            ((game_area[1].value == game_area[4].value) and (game_area[4].value == game_area[7].value)) or
+            ((game_area[2].value == game_area[5].value) and (game_area[5].value == game_area[8].value)) or
+            #Diagonal
+            ((game_area[0].value == game_area[4].value) and (game_area[4].value == game_area[8].value)) or
+            ((game_area[2].value == game_area[4].value) and (game_area[4].value == game_area[6].value))):
+
+            if xTurn == True:
+                print("Wygrywa gracz O")
+            else:
+                print("Wygrywa gracz X")    
 
         drawFrame()
 
