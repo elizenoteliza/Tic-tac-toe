@@ -20,19 +20,15 @@ menu_o = pg.image.load("sprites/osmall.bmp")
 menu_x = pg.image.load("sprites/xsmall.bmp")
 ###
 class Tile():
-    def __init__(self, pos_x, pos_y, color):
+    def __init__(self, pos_x, pos_y,):
         self.pos_x = pos_x
         self.pos_y = pos_y
-        self.color = color
         self.isDefault = True
         self.isX = False
         self.isO = False
         self.hoverOver = False
         self.dim = 100
-        self.temp_color = self.color
-   
-    def drawRectangle(self, wnd):
-        pg.draw.rect(wnd, self.color, (self.pos_x, self.pos_y, self.dim, self.dim))
+
 
     def drawTile(self, wnd):
         if self.isDefault:
@@ -46,20 +42,15 @@ class Tile():
         else:
             wnd.blit(tile_x, (self.pos_x, self.pos_y))
 
-white = (255, 255, 255)
-green = (0, 255, 0)
-blue = (0, 0, 255)
-grey = (119,136,153)
-
-game_area = [Tile(20, 50, white), Tile(150, 50, green), Tile(280, 50, white),
-             Tile(20, 180, green), Tile(150, 180, white), Tile(280, 180, green),
-             Tile(20, 310, white), Tile(150, 310, green), Tile(280, 310, white),]
+game_area = [Tile(20, 70), Tile(150, 70), Tile(280, 70),
+             Tile(20, 200), Tile(150, 200), Tile(280, 200),
+             Tile(20, 330), Tile(150, 330), Tile(280, 330)]
 
 ########################################################################
 #Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop#
 ########################################################################
 def drawFrame():
-    pg.Surface.fill(wnd, grey)
+    pg.Surface.fill(wnd, (100, 100, 100))
     for tile in game_area:
             tile.drawTile(wnd)
     
