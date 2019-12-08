@@ -49,12 +49,26 @@ class Tile():
             else:
                 wnd.blit(tile_o, (self.pos_x, self.pos_y))
                 self.value = 999
+        
+    def restartGame(self):
+        index = 1
+
+        for tile in game_area:
+
+            tile.isDefault = True
+            tile.isX = False
+            tile.value = index
+
+            index += 1
+
+        whoWins = ''
 
 game_area = [Tile(20, 70, 1), Tile(150, 70, 2), Tile(280, 70, 3),
              Tile(20, 200, 4), Tile(150, 200, 5), Tile(280, 200, 6),
              Tile(20, 330, 7), Tile(150, 330, 8), Tile(280, 330, 9)]
 
 whoWins = ''
+
 
 #Define who starts the game
 if random.randint(0,1) == 0:
@@ -68,8 +82,8 @@ else:
 #Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop#
 ########################################################################
 def drawFrame():
+    pg.Surface.fill(wnd, (100, 100, 100))
     if whoWins == '':
-        pg.Surface.fill(wnd, (100, 100, 100))
         for tile in game_area:
                 tile.drawTile(wnd)
         
@@ -85,7 +99,8 @@ while run:
     ###
     mousePos = pg.mouse.get_pos()  
     isClicked = pg.mouse.get_pressed() 
-    isClicked = pg.mouse.get_pressed() 
+    isClicked = pg.mouse.get_pressed()
+    doRestart = pg.key.get_pressed()[pg.K_r]
     ###
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -94,6 +109,8 @@ while run:
             isClicked = pg.mouse.get_pressed()
         if event.type == pg.MOUSEBUTTONUP:
             isClicked = pg.mouse.get_pressed()
+        if event.type == pg.KEYDOWN:
+            doRestart = pg.key.get_pressed()[pg.K_r] 
         ############################################################
         #Change color/texture of a tile if hover over and on-click.#
         ############################################################
@@ -142,7 +159,14 @@ while run:
             else:
                 whoWins = 'X'
 
+        
+        
+            
         drawFrame()
+
+        if not(whoWins == '') and  doRestart:
+            Tile.restartGame()
+       
 
 pg.quit()
 
