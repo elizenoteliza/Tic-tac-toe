@@ -55,10 +55,13 @@ class Player():
     def __init__(self, name, sign):
         self.name = name
         self.sign = sign
+        self.points = 0
         
 game_area = [Tile(20, 70, 1), Tile(150, 70, 2), Tile(280, 70, 3),
              Tile(20, 200, 4), Tile(150, 200, 5), Tile(280, 200, 6),
              Tile(20, 330, 7), Tile(150, 330, 8), Tile(280, 330, 9)]
+
+player = [Player("First's Name", "X"), Player("Second's Name", "O")]
 
 whoWins = ''
 
@@ -162,10 +165,15 @@ while run:
             ((game_area[0].value == game_area[4].value) and (game_area[4].value == game_area[8].value)) or
             ((game_area[2].value == game_area[4].value) and (game_area[4].value == game_area[6].value))):
 
-            if xTurn == True:
-                whoWins = 'O'
-            else:
+            if xTurn == False:
                 whoWins = 'X'
+                player[0].points += 1
+            else:
+                whoWins = 'O'
+                player[1].points += 1
+
+            restartGame()
+
         elif ((not(game_area[0].isDefault)) and (not(game_area[1].isDefault)) and (not(game_area[2].isDefault)) and 
               (not(game_area[3].isDefault)) and (not(game_area[4].isDefault)) and (not(game_area[5].isDefault)) and
               (not(game_area[6].isDefault)) and (not(game_area[7].isDefault)) and (not(game_area[8].isDefault))):
@@ -173,14 +181,7 @@ while run:
               whoWins = '/'
               restartGame()
 
-        ###########################################
-        #Checks if you want (and can) reset the game
-        
-        ###########################################
-        restartGame()
-            
         drawFrame()
-       
-
+    
 pg.quit()
 
