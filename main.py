@@ -21,6 +21,7 @@ menu_o = pg.image.load("sprites/osmall.bmp")
 menu_x = pg.image.load("sprites/xsmall.bmp")
 winscreen_o = pg.image.load("sprites/win_o.png")
 winscreen_x = pg.image.load("sprites/win_x.png")
+no_winner_scr = pg.image.load("sprites/win_no1.png")
 ###
 class Tile():
     def __init__(self, pos_x, pos_y, value):
@@ -49,26 +50,33 @@ class Tile():
             else:
                 wnd.blit(tile_o, (self.pos_x, self.pos_y))
                 self.value = 999
+
+class Player():
+    def __init__(self, name, sign):
+        self.name = name
+        self.sign = sign
         
-    def restartGame(self):
-        index = 1
-
-        for tile in game_area:
-
-            tile.isDefault = True
-            tile.isX = False
-            tile.value = index
-
-            index += 1
-
-        whoWins = ''
-
 game_area = [Tile(20, 70, 1), Tile(150, 70, 2), Tile(280, 70, 3),
              Tile(20, 200, 4), Tile(150, 200, 5), Tile(280, 200, 6),
              Tile(20, 330, 7), Tile(150, 330, 8), Tile(280, 330, 9)]
 
 whoWins = ''
 
+def restartGame():
+    global whoWins
+    if not(whoWins == '') and doRestart:
+
+            index = 1
+
+            for tile in game_area:
+
+                tile.isDefault = True
+                tile.isX = False
+                tile.value = index
+
+                index += 1
+
+            whoWins = ''
 
 #Define who starts the game
 if random.randint(0,1) == 0:
@@ -85,12 +93,16 @@ def drawFrame():
     pg.Surface.fill(wnd, (100, 100, 100))
     if whoWins == '':
         for tile in game_area:
-                tile.drawTile(wnd)
+            tile.drawTile(wnd)
         
     elif whoWins == 'O':
-            wnd.blit(winscreen_o, (0, 0))
+        wnd.blit(winscreen_o, (0, 0))
     elif whoWins == 'X':
-            wnd.blit(winscreen_x, (0, 0))
+        wnd.blit(winscreen_x, (0, 0))
+    elif whoWins == '/':
+        #if no one wins and the game is stuck
+        wnd.blit(no_winner_scr, (0, 0))
+
 
     pg.display.update()
 #####################################
@@ -136,11 +148,7 @@ while run:
                         tile.hoverOver = False
 
 
-        #######
-        #0#1#2#
-        #3#4#5#
-        #6#7#8#
-        #######
+        #### Finding winner ####
 
             #Horizontal
         if  ((game_area[0].value == game_area[1].value) and (game_area[1].value == game_area[2].value)  or
@@ -158,14 +166,20 @@ while run:
                 whoWins = 'O'
             else:
                 whoWins = 'X'
+        elif ((not(game_area[0].isDefault)) and (not(game_area[1].isDefault)) and (not(game_area[2].isDefault)) and 
+              (not(game_area[3].isDefault)) and (not(game_area[4].isDefault)) and (not(game_area[5].isDefault)) and
+              (not(game_area[6].isDefault)) and (not(game_area[7].isDefault)) and (not(game_area[8].isDefault))):
 
+              whoWins = '/'
+              restartGame()
+
+        ###########################################
+        #Checks if you want (and can) reset the game
         
-        
+        ###########################################
+        restartGame()
             
         drawFrame()
-
-        if not(whoWins == '') and  doRestart:
-            Tile.restartGame()
        
 
 pg.quit()
