@@ -22,6 +22,7 @@ menu_x = pg.image.load("sprites/xsmall.bmp")
 winscreen_o = pg.image.load("sprites/win_o.png")
 winscreen_x = pg.image.load("sprites/win_x.png")
 no_winner_scr = pg.image.load("sprites/win_no1.png")
+turn_scr = pg.image.load("sprites/turn_scr.png")
 ###
 class Tile():
     def __init__(self, pos_x, pos_y, value):
@@ -94,6 +95,12 @@ else:
 ########################################################################
 def drawFrame():
     pg.Surface.fill(wnd, (100, 100, 100))
+    wnd.blit(turn_scr, (390, 60))
+
+    if xTurn:
+        wnd.blit(menu_x, (425, 115))
+    else:
+        wnd.blit(menu_o, (425, 115))
     if whoWins == '':
         for tile in game_area:
             tile.drawTile(wnd)
@@ -182,6 +189,5 @@ while run:
               restartGame()
 
         drawFrame()
-    
+     
 pg.quit()
-
