@@ -23,6 +23,9 @@ winscreen_o = pg.image.load("sprites/win_o.png")
 winscreen_x = pg.image.load("sprites/win_x.png")
 no_winner_scr = pg.image.load("sprites/win_no1.png")
 turn_scr = pg.image.load("sprites/turn_scr.png")
+point_scr = [pg.image.load("sprites/point_numbers/p0.png"), pg.image.load("sprites/point_numbers/p1.png"),
+             pg.image.load("sprites/point_numbers/p2.png"), pg.image.load("sprites/point_numbers/p3.png"),
+             pg.image.load("sprites/point_numbers/p4.png"), pg.image.load("sprites/point_numbers/p5.png")]
 ###
 class Tile():
     def __init__(self, pos_x, pos_y, value):
@@ -95,16 +98,28 @@ else:
 ########################################################################
 def drawFrame():
     pg.Surface.fill(wnd, (100, 100, 100))
-    wnd.blit(turn_scr, (390, 60))
+    
 
-    if xTurn:
-        wnd.blit(menu_x, (425, 115))
-    else:
-        wnd.blit(menu_o, (425, 115))
+    #What to draw if a game is running / there's no winner
     if whoWins == '':
+
+        #Game area
         for tile in game_area:
             tile.drawTile(wnd)
-        
+        #Whoose turn
+        wnd.blit(turn_scr, (390, 60))
+        if xTurn:
+            wnd.blit(menu_x, (425, 115))
+        else:
+            wnd.blit(menu_o, (425, 115))
+        #Points
+        #xPlayer
+        wnd.blit(point_scr[player[0].points], (390, 190))
+        wnd.blit(menu_x, (405, 225))
+        #yPlayer
+        wnd.blit(point_scr[player[1].points], (390, 320))
+        wnd.blit(menu_o, (405, 355))
+
     elif whoWins == 'O':
         wnd.blit(winscreen_o, (0, 0))
     elif whoWins == 'X':
@@ -172,12 +187,13 @@ while run:
             ((game_area[0].value == game_area[4].value) and (game_area[4].value == game_area[8].value)) or
             ((game_area[2].value == game_area[4].value) and (game_area[4].value == game_area[6].value))):
 
-            if xTurn == False:
-                whoWins = 'X'
-                player[0].points += 1
-            else:
-                whoWins = 'O'
-                player[1].points += 1
+            if whoWins == '':
+                if xTurn == False:
+                    player[0].points += 1
+                    whoWins = 'X'
+                else:
+                    player[1].points += 1
+                    whoWins = 'O'
 
             restartGame()
 
