@@ -8,7 +8,8 @@ pg.init()
 scr_width = 500
 scr_height = 500
 wnd = pg.display.set_mode((scr_width, scr_height))
-pg.display.set_caption("PONG by Laazaarus")
+pg.display.set_caption("Tic Tac Toe by Laazaarus")
+pg.display.set_icon(pg.image.load("sprites/x.bmp"))
 ############################################################
 #VARIABLES##CLASSES##VARIABLES##CLASSES##VARIABLES##CLASSES#
 ############################################################
@@ -97,7 +98,7 @@ else:
 #Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop##Loop#
 ########################################################################
 def drawFrame():
-    pg.Surface.fill(wnd, (100, 100, 100))
+    pg.Surface.fill(wnd, (120, 100, 100))
     
 
     #What to draw if a game is running / there's no winner
